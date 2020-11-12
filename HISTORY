@@ -1,0 +1,21 @@
+6. October 2012
+===============
+- Released a fully functional FakeDNS server on github.
+
+
+11. January 2014
+================
+- Added database to log requests which the DNS-server receive. It writes
+  these requests into a sqlite3 file with the help of data_mapper-gem.
+
+
+8. February 2015
+================
+- Rebuilt the Server to be more ruby like.
+- Server is now using Resolv stdlib to create and handle dns messages.
+- Some modifications in application.rb are done to support the new server.
+- Removed less brilliant visions i had. 
+
+9. November 2020
+================
+- Removed PacketFu requirements.

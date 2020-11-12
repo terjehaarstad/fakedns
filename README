@@ -1,0 +1,19 @@
+#FakeDNS:
+A small, dirty and fake dns server written in ruby.
+It starts a DNS service which listens on wanted ip-address and reply
+on all queries received.
+
+## Requirements
+Ruby 2.5
+
+## Install
+Debian Enviroment:
+
+ sudo gem install fakedns-VERSION.gem
+ 
+## Usage
+Since we are using lower ports (in this case 53) you need to run the 
+program with super user privileges.
+
+Ex: (Assuming nothing else is running on that port)
+sudo ./fakedns.rb --interface vboxnet0

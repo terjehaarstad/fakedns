@@ -1,0 +1,9 @@
+#!/usr/bin/ruby
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '/../lib'))
+
+require 'rubygems'
+require 'fakedns'
+#
+# FakeDNS executable
+#
+FakeDNS::Application.new(ARGV).run
