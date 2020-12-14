@@ -9,15 +9,14 @@ module FakeDNS
       @ip_addr = ip_addr
       @port = port
       @socket = UDPSocket.new
-      @resolv_ip = resolv_ip
-      @resolv_ip = @ip_addr if @resolv_ip.nil? or @resolv_ip.empty?
+      @resolv_ip = resolv_ip || @ip_addr
     end
     ##
     # Create fake response
     
     def create_fake_response(msg_klass)
       resp = msg_klass
-      resp.qr = 1                                    # Set query (0) / response (1) flag.
+      resp.qr = 1                                           # Set query (0) / response (1) flag.
       domain_name, resource = resp.question[0]              # Extract domain-name and typeclass.
       
       # Create typeclass with either NIC' IP or given resolv-ip based questions typeclass.
