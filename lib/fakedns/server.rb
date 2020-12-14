@@ -1,7 +1,6 @@
 require 'resolv'
 
 module FakeDNS
-  MAX_SIZE = 512    # Max allowed bytes in a UDP datagram anyways.
   class Server
     ##
     # Create a fake UDP server. 
@@ -25,14 +24,6 @@ module FakeDNS
         resp.add_answer(domain_name, rand(0xff), resource)
       end
       return resp
-    end
-    ##
-    # Is data a dns-request?.
-    
-    def is_dns_request?(data)
-      # Q/R-bit(bit7) is 0 and, Recursion desired? or not? (bit0).
-      return true if data[2].eql? "\x01" or data[2].eql? "\x00"
-      return false
     end
     
     ##
@@ -67,9 +58,9 @@ module FakeDNS
       puts "Starting FakeDNS server at #{@ip_addr}:#{@port}"
       puts "-" * 40
       while @socket
-        data, sender = @socket.recvfrom  MAX_SIZE
-        if is_dns_request? data
-          request = Resolv::DNS::Message.decode data
+        data, sender = @socket.recvfrom  1024
+        request = Resolv::DNS::Message.decode data
+        if request.class.eql? Resolv::DNS::Message
           domain_name = request.question.first.first.to_s
           
           resolved = Resolv.getaddresses(domain_name) if $lookup
@@ -77,6 +68,7 @@ module FakeDNS
           
           response = create_fake_response request
           @socket.send response.encode, 0, sender[3], sender[1]
+      
         end
       end
     end
