@@ -61,14 +61,16 @@ module FakeDNS
         data, sender = @socket.recvfrom  1024
         request = Resolv::DNS::Message.decode data
         if request.class.eql? Resolv::DNS::Message
-          domain_name = request.question.first.first.to_s
+          begin
+            domain_name = request.question.first.first.to_s
           
-          resolved = Resolv.getaddresses(domain_name) if $lookup
-          display_query(sender, domain_name, resolved)
+            resolved = Resolv.getaddresses(domain_name) if $lookup
+            display_query(sender, domain_name, resolved)
           
-          response = create_fake_response request
-          @socket.send response.encode, 0, sender[3], sender[1]
-      
+            response = create_fake_response request
+            @socket.send response.encode, 0, sender[3], sender[1]
+          rescue => e
+          end
         end
       end
     end
