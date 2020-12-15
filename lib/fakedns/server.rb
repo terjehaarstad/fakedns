@@ -58,18 +58,20 @@ module FakeDNS
       puts "Starting FakeDNS server at #{@ip_addr}:#{@port}"
       puts "-" * 40
       while @socket
-        data, sender = @socket.recvfrom  1024
+        data, sender = @socket.recvfrom  65536
         request = Resolv::DNS::Message.decode data
         if request.class.eql? Resolv::DNS::Message
           begin
-            domain_name = request.question.first.first.to_s
+            request.question.each do |q|
+              domain_name = q[0].to_s
           
-            resolved = Resolv.getaddresses(domain_name) if $lookup
-            display_query(sender, domain_name, resolved)
+              resolved = Resolv.getaddresses(domain_name) if $lookup
+              display_query(sender, domain_name, resolved)
           
-            response = create_fake_response request
-            @socket.send response.encode, 0, sender[3], sender[1]
-          rescue => e
+              response = create_fake_response request
+              @socket.send response.encode, 0, sender[3], sender[1]
+            end
+          #rescue => e
           end
         end
       end
