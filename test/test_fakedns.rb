@@ -31,12 +31,7 @@ class TestServer < Test::Unit::TestCase
 	end
 	def test_resolv
 		addr = resolv_name
-		assert_equal @@resolv, addr, "Address should be '#{@@resolv}'"
-	end
-	def test_n_times
-		(65535*2).times do
-			resolv_name
-		end
+		assert_equal @@resolv, addr
 	end
 	def kill_server
 		@@server.close
